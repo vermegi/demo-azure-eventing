@@ -48,18 +48,34 @@
       }
     },
     "serviceBusNamespaceName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the Service Bus Namespace"
-            }
-        }
+      "type": "string",
+      "metadata": {
+          "description": "Name of the Service Bus Namespace"
+      }
+    },
+    "serviceBusSku": {
+      "type": "string",
+      "allowedValues": [
+          "Standard",
+          "Premium"
+      ],
+      "defaultValue": "Standard",
+      "metadata": {
+          "description": "The messaging tier for service Bus namespace"
+      }
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "defaultSASKeyName": "RootManageSharedAccessKey",
+    "defaultAuthRuleResourceId": "[resourceId('Microsoft.ServiceBus/namespaces/authorizationRules', parameters('serviceBusNamespaceName'), variables('defaultSASKeyName'))]"
   },
   "resources": [
-    {
+  {
       "apiVersion": "2015-08-01",
       "name": "[parameters('hostingPlanName')]",
       "type": "Microsoft.Web/serverfarms",
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
       "sku": {
         "name": "[parameters('sku')]",
         "capacity": "[parameters('workerSize')]"
@@ -72,7 +88,7 @@
       "apiVersion": "2015-08-01",
       "name": "[parameters('siteName')]",
       "type": "Microsoft.Web/sites",
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
       ],
@@ -84,11 +100,23 @@
       "apiVersion": "2015-08-01",
       "name": "[parameters('serviceBusNamespaceName')]",
       "type": "Microsoft.ServiceBus/namespaces",
-      "location": "[resourceGroup().location]",
-      "properties": {
+      "location": "[variables('location')]",
+      "kind": "Messaging",
+      "sku": {
+          "name": "[parameters('serviceBusSku')]",
+          "tier": "[parameters('serviceBusSku')]"
       },
-      "resources": [
-      ]
+      "properties": {}
     }
-  ]
+  ],
+  "outputs": {
+        "NamespaceDefaultConnectionString": {
+            "type": "string",
+            "value": "[listkeys(variables('defaultAuthRuleResourceId'), parameters('serviceBusApiVersion')).primaryConnectionString]"
+        },
+        "DefaultSharedAccessPolicyPrimaryKey": {
+            "type": "string",
+            "value": "[listkeys(variables('defaultAuthRuleResourceId'), parameters('serviceBusApiVersion')).primaryKey]"
+        }
+    }
 }
