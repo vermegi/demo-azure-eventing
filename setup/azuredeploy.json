@@ -43,6 +43,22 @@
           "contentVersion":"1.0.0.0"
        }
       } 
+    },
+    {
+      "apiVersion": "2015-01-01", 
+      "name": "docDbTemplate", 
+      "type": "Microsoft.Resources/deployments", 
+      "properties": { 
+        "mode": "incremental", 
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/docDbTemplate.json",
+          "contentVersion": "1.0.0.0"
+        }, 
+        "parametersLink": { 
+          "uri":"https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/docDbTemplate.parameters.json",
+          "contentVersion":"1.0.0.0"
+       }
+      } 
     }
     // {
     //   "apiVersion": "2015-01-01", 
