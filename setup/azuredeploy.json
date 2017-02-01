@@ -46,7 +46,13 @@
       "metadata": {
         "description": "The instance size of the hosting plan (small, medium, or large)."
       }
-    }
+    },
+    "serviceBusNamespaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Service Bus Namespace"
+            }
+        }
   },
   "resources": [
     {
@@ -73,6 +79,16 @@
       "properties": {
         "serverFarmId": "[parameters('hostingPlanName')]"
       }
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[parameters('serviceBusNamespaceName')]",
+      "type": "Microsoft.ServiceBus/namespaces",
+      "location": "[resourceGroup().location]",
+      "properties": {
+      },
+      "resources": [
+      ]
     }
   ]
 }

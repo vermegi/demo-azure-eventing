@@ -7,6 +7,9 @@
     },
     "hostingPlanName": {
       "value": "GEN-UNIQUE"
-    }
+    },
+    "serviceBusNamespaceName": {
+            "value": "GEN-UNIQUE"
+        }
   }
 }
