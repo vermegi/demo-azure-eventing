@@ -48,7 +48,9 @@
       }
     }
   },
-  "variables": {},
+  "variables": {
+          "location": "[resourceGroup().location]"
+  },
   "resources": [
     {
         "apiVersion": "2015-08-01",
