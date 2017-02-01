@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "siteName": {
-      "value": "GEN-UNIQUE"
+      "value": "azure-eventing-demo"
     },
     "hostingPlanName": {
-      "value": "GEN-UNIQUE"
+      "value": "aed_hp"
     },
     "serviceBusNamespaceName": {
-            "value": "GEN-UNIQUE"
+            "value": "azure-eventing-demo"
         }
   }
 }
