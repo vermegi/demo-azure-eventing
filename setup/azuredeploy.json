@@ -68,7 +68,8 @@
   "variables": {
     "location": "[resourceGroup().location]",
     "defaultSASKeyName": "RootManageSharedAccessKey",
-    "defaultAuthRuleResourceId": "[resourceId('Microsoft.ServiceBus/namespaces/authorizationRules', parameters('serviceBusNamespaceName'), variables('defaultSASKeyName'))]"
+    "defaultAuthRuleResourceId": "[resourceId('Microsoft.ServiceBus/namespaces/authorizationRules', parameters('serviceBusNamespaceName'), variables('defaultSASKeyName'))]",
+    "serviceBusApiVersion": "2015-08-01"
   },
   "resources": [
   {
@@ -97,7 +98,7 @@
       }
     },
     {
-      "apiVersion": "2015-08-01",
+      "apiVersion": "[variables('serviceBusApiVersion')]",
       "name": "[parameters('serviceBusNamespaceName')]",
       "type": "Microsoft.ServiceBus/namespaces",
       "location": "[variables('location')]",
@@ -112,11 +113,11 @@
   "outputs": {
         "NamespaceDefaultConnectionString": {
             "type": "string",
-            "value": "[listkeys(variables('defaultAuthRuleResourceId'), parameters('serviceBusApiVersion')).primaryConnectionString]"
+            "value": "[listkeys(variables('defaultAuthRuleResourceId'), variables('serviceBusApiVersion')).primaryConnectionString]"
         },
         "DefaultSharedAccessPolicyPrimaryKey": {
             "type": "string",
-            "value": "[listkeys(variables('defaultAuthRuleResourceId'), parameters('serviceBusApiVersion')).primaryKey]"
+            "value": "[listkeys(variables('defaultAuthRuleResourceId'), variables('serviceBusApiVersion')).primaryKey]"
         }
     }
 }
