@@ -27,38 +27,6 @@
     "serviceBusApiVersion": "2015-08-01"
   },
   "resources": [
-    {
-      "apiVersion": "2015-01-01", 
-      "name": "webappTemplate", 
-      "type": "Microsoft.Resources/deployments", 
-      "properties": { 
-        "mode": "incremental", 
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/webappTemplate.json",
-          "contentVersion": "1.0.0.0"
-        }, 
-        "parametersLink": { 
-          "uri":"https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/webappTemplate.parameters.json",
-          "contentVersion":"1.0.0.0"
-       }
-      } 
-    },
-    {
-      "apiVersion": "2015-01-01", 
-      "name": "serviceBusTemplate", 
-      "type": "Microsoft.Resources/deployments", 
-      "properties": { 
-        "mode": "incremental", 
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/serviceBusTemplate.json",
-          "contentVersion": "1.0.0.0"
-        }, 
-        "parametersLink": { 
-          "uri":"https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/serviceBusTemplate.parameters.json",
-          "contentVersion":"1.0.0.0"
-       }
-      } 
-    },
       {
         "apiVersion": "[variables('serviceBusApiVersion')]",
         "name": "[parameters('serviceBusNamespaceName')]",
