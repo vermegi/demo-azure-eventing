@@ -106,7 +106,7 @@
          "serviceBusNamespaceName": { "value": "[variables('serviceBusNamespaceName')]" },
          "databaseAccountName": { "value": "[variables('databaseAccountName')]" },
          "sb_connectionString": {"value": "[reference('serviceBusTemplate').outputs.NamespaceDefaultConnectionString.value]"},
-         "docdb_databaseAccount": {"value": "[reference('docDbTemplate').outputs.docDbEndpoint.value]"},
+         "docdb_databaseAccount": {"value": "[variables('logicAppName')]"},
          "docdb_accessKey": {"value": "[reference('docDbTemplate').outputs.docDbPrimaryKey.value]"}
        }
       } 
