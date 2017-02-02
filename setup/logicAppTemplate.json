@@ -40,8 +40,6 @@
     }
   },
   "variables": {
-      "sbconn": "sbconn",
-      "docdbconn": "docdbconn"
   },
   "resources": [
     {
@@ -54,12 +52,12 @@
           "value": {
               "documentdb": {
                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'documentdb')]",
-                "connectionId": "[resourceId('Microsoft.Web/connections', 'docdbconn']",
+                "connectionId": "[resourceId('Microsoft.Web/connections', 'docdbconn')]",
                 "connectionName": "docdbconn"
               },
               "servicebus": {
                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'servicebus')]",
-                "connectionId": "[resourceId('Microsoft.Web/connections', 'sbconn']",
+                "connectionId": "[resourceId('Microsoft.Web/connections', 'sbconn')]",
                 "connectionName": "sbconn"
               },
               "function":{
@@ -247,20 +245,20 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/connections', variables('sbconn')]",
-        "[resourceId('Microsoft.Web/connections', variables('docdbconn')]"
+        "[resourceId('Microsoft.Web/connections', 'sbconn')]",
+        "[resourceId('Microsoft.Web/connections', 'docdbconn')]"
       ]
     },
     {
       "type": "MICROSOFT.WEB/CONNECTIONS",
       "apiVersion": "2016-06-01",
-      "name": "variables('sbconn')",
+      "name": "sbconn",
       "location": "[resourceGroup().location]",
       "properties": {
         "api": {
           "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'servicebus')]"
         },
-        "displayName": "variables('sbconn')",
+        "displayName": "sbconn",
         "parameterValues": {
           "connectionString": "[parameters('sb_connectionString')]"
         },
@@ -272,13 +270,13 @@
     {
       "type": "MICROSOFT.WEB/CONNECTIONS",
       "apiVersion": "2016-06-01",
-      "name": "variables('docdbconn')",
+      "name": "docdbconn",
       "location": "[resourceGroup().location]",
       "properties": {
         "api": {
           "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'documentdb')]"
         },
-        "displayName": "variables('docdbconn')",
+        "displayName": "docdbconn",
         "parameterValues": {
           "databaseAccount": "[parameters('docdb_databaseAccount')]",
           "accessKey": "[parameters('docdb_accessKey')]"
