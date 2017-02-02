@@ -5,6 +5,9 @@
     "siteName": {
       "value": "azure-eventing-demo"
     },
+    "functionAppName": {
+      "value": "azure-eventing-fun"
+    },
     "hostingPlanName": {
       "value": "aed_hp"
     }

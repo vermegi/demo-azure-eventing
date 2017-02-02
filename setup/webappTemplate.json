@@ -46,11 +46,16 @@
       "metadata": {
         "description": "The instance size of the hosting plan (small, medium, or large)."
       }
-    }
+    },
+    "functionAppName": {
+      "type": "string",
+       "metadata": {
+        "description": "The name of the function app that you wish to create."
+      }
+   }
   },
   "variables": {
-          "location": "[resourceGroup().location]",
-          "functionAppName": "concat(parameters('siteName'), '_fun')"
+          "location": "[resourceGroup().location]"
   },
   "resources": [
     {
@@ -81,11 +86,11 @@
       {
         "apiVersion": "2015-08-01",
         "type": "Microsoft.Web/sites",
-        "name": "[variables('functionAppName')]",
+        "name": "[parameters('functionAppName')]",
         "location": "[resourceGroup().location]",
         "kind": "functionapp",
         "properties": {
-            "name": "[variables('functionAppName')]",
+            "name": "[parameters('functionAppName')]",
             "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
             "hostingEnvironment": "",
             "clientAffinityEnabled": false,
