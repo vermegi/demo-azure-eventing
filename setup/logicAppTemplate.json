@@ -40,6 +40,7 @@
     }
   },
   "variables": {
+      "functionId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/sites/azure-eventing-fun/functions/GenericWebhookFun')]"
   },
   "resources": [
     {
@@ -59,9 +60,6 @@
                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'servicebus')]",
                 "connectionId": "[resourceId('Microsoft.Web/connections', 'sbconn')]",
                 "connectionName": "sbconn"
-              },
-              "function":{
-                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/sites/azure-eventing-fun/functions/GenericWebhookFun')]"
               }
            }
         },
@@ -99,7 +97,7 @@
                           "dbname": "azure-eventing-db"
                       },
                       "function": {
-                          "id": "@parameters('$connections')['function']['id']"
+                          "id": "[variables('functionId')]"
                       }
                   },
                   "runAfter": {},
