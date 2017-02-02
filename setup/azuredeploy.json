@@ -10,6 +10,10 @@
     }
   },
   "variables": {
+    "serviceBusNamespaceName": "[parameters('projectname')]",
+    "logicAppName": "[parameters('projectname')]",
+    "databaseAccountName": "[parameters('projectname')]",
+    "siteName": "[parameters('projectname')]"
   },
   "resources": [
     {
@@ -25,6 +29,9 @@
         "parametersLink": { 
           "uri":"https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/webappTemplate.parameters.json",
           "contentVersion":"1.0.0.0"
+       },
+       "parameters":{
+         "siteName": {"value": "[variables('siteName')]"}
        }
       } 
     },
@@ -41,6 +48,9 @@
         "parametersLink": { 
           "uri":"https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/serviceBusTemplate.parameters.json",
           "contentVersion":"1.0.0.0"
+       },
+       "parameters":{
+         "serviceBusNamespaceName": {"value": "[variables('serviceBusNamespaceName')]"}
        }
       } 
     },
@@ -57,6 +67,9 @@
         "parametersLink": { 
           "uri":"https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/docDbTemplate.parameters.json",
           "contentVersion":"1.0.0.0"
+       },
+       "parameters":{
+         "databaseAccountName": {"value": "[variables('databaseAccountName')]"}
        }
       } 
     }
@@ -73,7 +86,17 @@
     //     "parametersLink": { 
     //       "uri":"https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/logicAppTemplate.parameters.json",
     //       "contentVersion":"1.0.0.0"
-    //    }
+    //    },
+    //    "parameters":{
+    //      "logicAppName": { "value": "[variables('logicAppName')]" },
+    //      "sb_connectionString": {"value": "[reference('serviceBusTemplate').outputs.NamespaceDefaultConnectionString]"},
+    //      "docdb_databaseAccount": {"value": "[reference('docDbTemplate').outputs.docDbEndpoint]"},
+    //      "docdb_accessKey": {"value": "[reference('docDbTemplate').outputs.docDbPrimaryKey]"}
+    //    },
+    //     "dependsOn": [
+    //       "[resourceId('Microsoft.ServiceBus/namespaces', variables('serviceBusNamespaceName'))]",
+    //       "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccountName'))]"
+    //     ]
     //   } 
     // }
   ],
