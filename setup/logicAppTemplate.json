@@ -49,20 +49,6 @@
       "name": "[parameters('logicAppName')]",
       "location": "[resourceGroup().location]",
       "properties": {
-        "$connections": {
-          "value": {
-              "documentdb": {
-                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'documentdb')]",
-                "connectionId": "[resourceId('Microsoft.Web/connections', 'docdbconn')]",
-                "connectionName": "docdbconn"
-              },
-              "servicebus": {
-                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'servicebus')]",
-                "connectionId": "[resourceId('Microsoft.Web/connections', 'sbconn')]",
-                "connectionName": "sbconn"
-              }
-           }
-        },
         "definition": {
             "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
             "actions": {
@@ -238,6 +224,22 @@
                         "interval": 3
                     },
                     "type": "ApiConnection"
+                }
+            }
+        },
+        "parameters":{
+            "$connections": {
+                "value": {
+                    "documentdb": {
+                        "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'documentdb')]",
+                        "connectionId": "[resourceId('Microsoft.Web/connections', 'docdbconn')]",
+                        "connectionName": "docdbconn"
+                    },
+                    "servicebus": {
+                        "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'servicebus')]",
+                        "connectionId": "[resourceId('Microsoft.Web/connections', 'sbconn')]",
+                        "connectionName": "sbconn"
+                    }
                 }
             }
         }
