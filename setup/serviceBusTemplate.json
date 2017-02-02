@@ -1,0 +1,91 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "serviceBusNamespaceName": {
+      "type": "string",
+      "metadata": {
+          "description": "Name of the Service Bus Namespace"
+      }
+    },
+    "serviceBusSku": {
+      "type": "string",
+      "allowedValues": [
+          "Standard",
+          "Premium"
+      ],
+      "defaultValue": "Standard",
+      "metadata": {
+          "description": "The messaging tier for service Bus namespace"
+      }
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "defaultSASKeyName": "RootManageSharedAccessKey",
+    "defaultAuthRuleResourceId": "[resourceId('Microsoft.ServiceBus/namespaces/authorizationRules', parameters('serviceBusNamespaceName'), variables('defaultSASKeyName'))]",
+    "serviceBusApiVersion": "2015-08-01"
+  },
+  "resources": [
+      {
+        "apiVersion": "[variables('serviceBusApiVersion')]",
+        "name": "[parameters('serviceBusNamespaceName')]",
+        "type": "Microsoft.ServiceBus/namespaces",
+        "location": "[variables('location')]",
+        "kind": "Messaging",
+        "sku": {
+            "name": "[parameters('serviceBusSku')]",
+            "tier": "[parameters('serviceBusSku')]"
+        },
+        "properties": {},
+        "resources": [
+        {
+            "apiVersion": "[variables('serviceBusApiVersion')]",
+            "name": "Bookingrequests",
+            "type": "Queues",
+            "dependsOn": [
+                "[concat('Microsoft.ServiceBus/namespaces/', parameters('serviceBusNamespaceName'))]"
+            ],
+            "properties": {},
+            "resources": []
+        },
+        {
+            "apiVersion": "[variables('serviceBusApiVersion')]",
+            "name": "BookingUpdates",
+            "type": "Topics",
+            "dependsOn": [
+                "[concat('Microsoft.ServiceBus/namespaces/', parameters('serviceBusNamespaceName'))]"
+            ],
+            "properties": {
+                "path": "BookingUpdates"
+            },
+            "resources": [
+                {
+                    "apiVersion": "[variables('serviceBusApiVersion')]",
+                    "name": "BookingUpdatesSubscription",
+                    "type": "Subscriptions",
+                    "dependsOn": [
+                        "BookingUpdates"
+                    ],
+                    "properties": {
+                    },
+                    "resources": [
+                    ]
+                }
+            ]
+        }
+
+        ]
+      }
+  ],
+  "outputs": {
+        "NamespaceDefaultConnectionString": {
+            "type": "string",
+            "value": "[listkeys(variables('defaultAuthRuleResourceId'), variables('serviceBusApiVersion')).primaryConnectionString]"
+        },
+        "DefaultSharedAccessPolicyPrimaryKey": {
+            "type": "string",
+            "value": "[listkeys(variables('defaultAuthRuleResourceId'), variables('serviceBusApiVersion')).primaryKey]"
+        }
+    }
+}

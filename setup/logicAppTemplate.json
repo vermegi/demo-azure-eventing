@@ -1,0 +1,285 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "logicAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the logic app to create."
+      }
+    },
+    "serviceBusNamespaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the servicebus to connect to."
+      }
+    },
+    "databaseAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the documentdb to connect to."
+      }
+    },
+    "sb_connectionString": {
+      "type": "string",
+      "metadata": {
+        "description": "Connection string to the service bus"
+      }
+    },
+    "docdb_databaseAccount": {
+      "type": "string",
+      "metadata": {
+        "description": "Connection string to the service bus"
+      }
+    },
+    "docdb_accessKey": {
+      "type": "string",
+      "metadata": {
+        "description": "Connection string to the service bus"
+      }
+    }
+  },
+  "variables": {
+      "functionId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/sites/azure-eventing-fun/functions/GenericWebhookFun')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2016-06-01",
+      "name": "[parameters('logicAppName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "definition": {
+            "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+            "actions": {
+                "Complete_the_message_in_a_queue_2": {
+                    "inputs": {
+                        "host": {
+                            "api": {
+                                "runtimeUrl": "https://logic-apis-westeurope.azure-apim.net/apim/servicebus"
+                            },
+                            "connection": {
+                                "name": "@parameters('$connections')['servicebus']['connectionId']"
+                            }
+                        },
+                        "method": "delete",
+                        "path": "/@{encodeURIComponent('bookingrequests')}/messages/complete",
+                        "queries": {
+                            "lockToken": "@{triggerBody()?['LockToken']}",
+                            "queueType": "Main"
+                        }
+                    },
+                    "runAfter": {
+                        "Send_message": [
+                            "Succeeded"
+                        ]
+                    },
+                    "type": "ApiConnection"
+                },
+                "GenericWebhookFun": {
+                  "inputs": {
+                      "body": {
+                          "collname": "sbmessages",
+                          "dbname": "azure-eventing-db"
+                      },
+                      "function": {
+                          "id": "[variables('functionId')]"
+                      }
+                  },
+                  "runAfter": {},
+                  "type": "Function"
+              },
+              "Compose": {
+                    "inputs": {
+                        "Message": "@{base64ToString(triggerBody()?['ContentData'])}",
+                        "Status": "New"
+                    },
+                    "runAfter": {
+                      "GenericWebhookFun": ["Succeeded"]
+                    },
+                    "type": "Compose"
+                },
+                "Compose_2": {
+                    "inputs": {
+                        "Message": "@{base64ToString(triggerBody()?['ContentData'])}",
+                        "Status": "Processed"
+                    },
+                    "runAfter": {
+                        "Delay": [
+                            "Succeeded"
+                        ]
+                    },
+                    "type": "Compose"
+                },
+                "Create_or_update_document": {
+                    "inputs": {
+                        "body": "@outputs('Compose')",
+                        "headers": {
+                            "x-ms-documentdb-is-upsert": true
+                        },
+                        "host": {
+                            "api": {
+                                "runtimeUrl": "https://logic-apis-westeurope.azure-apim.net/apim/documentdb"
+                            },
+                            "connection": {
+                                "name": "@parameters('$connections')['documentdb']['connectionId']"
+                            }
+                        },
+                        "method": "post",
+                        "path": "/dbs/azureeventingdb/colls/sbmessages/docs"
+                    },
+                    "runAfter": {
+                        "Compose": [
+                            "Succeeded"
+                        ]
+                    },
+                    "type": "ApiConnection"
+                },
+                "Delay": {
+                    "inputs": {
+                        "interval": {
+                            "count": 10,
+                            "unit": "Second"
+                        }
+                    },
+                    "runAfter": {
+                        "Create_or_update_document": [
+                            "Succeeded"
+                        ]
+                    },
+                    "type": "Wait"
+                },
+                "Replace_a_document": {
+                    "inputs": {
+                        "body": "@outputs('Compose_2')",
+                        "host": {
+                            "api": {
+                                "runtimeUrl": "https://logic-apis-westeurope.azure-apim.net/apim/documentdb"
+                            },
+                            "connection": {
+                                "name": "@parameters('$connections')['documentdb']['connectionId']"
+                            }
+                        },
+                        "method": "put",
+                        "path": "/dbs/azureeventingdb/colls/sbmessages/docs/@{encodeURIComponent(body('Create_or_update_document')?['id'])}"
+                    },
+                    "runAfter": {
+                        "Compose_2": [
+                            "Succeeded"
+                        ]
+                    },
+                    "type": "ApiConnection"
+                },
+                "Send_message": {
+                    "inputs": {
+                        "body": {
+                            "ContentData": "@{base64(outputs('Compose_2'))}"
+                        },
+                        "host": {
+                            "api": {
+                                "runtimeUrl": "https://logic-apis-westeurope.azure-apim.net/apim/servicebus"
+                            },
+                            "connection": {
+                                "name": "@parameters('$connections')['servicebus']['connectionId']"
+                            }
+                        },
+                        "method": "post",
+                        "path": "/@{encodeURIComponent('bookingupdates')}/messages"
+                    },
+                    "runAfter": {
+                        "Replace_a_document": [
+                            "Succeeded"
+                        ]
+                    },
+                    "type": "ApiConnection"
+                }
+            },
+            "contentVersion": "1.0.0.0",
+            "outputs": {},
+            "parameters": {
+                "$connections": {
+                    "defaultValue": {},
+                    "type": "Object"
+                }
+            },
+            "triggers": {
+                "When_a_message_is_received_in_a_queue_(peek-lock)": {
+                    "inputs": {
+                        "host": {
+                            "api": {
+                                "runtimeUrl": "https://logic-apis-westeurope.azure-apim.net/apim/servicebus"
+                            },
+                            "connection": {
+                                "name": "@parameters('$connections')['servicebus']['connectionId']"
+                            }
+                        },
+                        "method": "get",
+                        "path": "/@{encodeURIComponent('bookingrequests')}/messages/head/peek",
+                        "queries": {
+                            "queueType": "Main"
+                        }
+                    },
+                    "recurrence": {
+                        "frequency": "Minute",
+                        "interval": 3
+                    },
+                    "type": "ApiConnection"
+                }
+            }
+        },
+        "parameters":{
+            "$connections": {
+                "value": {
+                    "documentdb": {
+                        "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'documentdb')]",
+                        "connectionId": "[resourceId('Microsoft.Web/connections', 'docdbconn')]",
+                        "connectionName": "docdbconn"
+                    },
+                    "servicebus": {
+                        "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'servicebus')]",
+                        "connectionId": "[resourceId('Microsoft.Web/connections', 'sbconn')]",
+                        "connectionName": "sbconn"
+                    }
+                }
+            }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/connections', 'sbconn')]",
+        "[resourceId('Microsoft.Web/connections', 'docdbconn')]"
+      ]
+    },
+    {
+      "type": "MICROSOFT.WEB/CONNECTIONS",
+      "apiVersion": "2016-06-01",
+      "name": "sbconn",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "api": {
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'servicebus')]"
+        },
+        "displayName": "sbconn",
+        "parameterValues": {
+          "connectionString": "[parameters('sb_connectionString')]"
+        }       
+      }
+    },
+    {
+      "type": "MICROSOFT.WEB/CONNECTIONS",
+      "apiVersion": "2016-06-01",
+      "name": "docdbconn",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "api": {
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'documentdb')]"
+        },
+        "displayName": "docdbconn",
+        "parameterValues": {
+          "databaseAccount": "[parameters('docdb_databaseAccount')]",
+          "accessKey": "[parameters('docdb_accessKey')]"
+        }
+      }     
+    }
+  ],
+  "outputs": {}
+}

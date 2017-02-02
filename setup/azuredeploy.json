@@ -1,0 +1,131 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "projectname": {
+      "type": "string",
+      "metadata": {
+          "description": "Name of the project"
+      }
+    },
+    "functionAppName": {
+      "type": "string",
+      "metadata": {
+          "description": "Name of the function app"
+      }
+    },
+    "hostingPlanName": {
+      "type": "string",
+      "metadata": {
+          "description": "Name of the hosting plan"
+      }
+    },
+    "Branch": {
+      "type": "string",
+      "defaultValue": "master",
+      "metadata": {
+        "description": "the branch you wish to deploy"
+      }
+    },
+    "GitBaseUri": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing",
+      "metadata": {
+        "description": "base url of the git repo"
+      }
+    }
+  },
+  "variables": {
+    "serviceBusNamespaceName": "[parameters('projectname')]",
+    "logicAppName": "[parameters('projectname')]",
+    "databaseAccountName": "[parameters('projectname')]",
+    "siteName": "[parameters('projectname')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2015-01-01", 
+      "name": "webappTemplate", 
+      "type": "Microsoft.Resources/deployments", 
+      "properties": { 
+        "mode": "incremental", 
+        "templateLink": {
+          "uri": "[concat(parameters('GitBaseUri'), '/', parameters('Branch'), '/setup/webappTemplate.json')]",
+          "contentVersion": "1.0.0.0"
+        }, 
+       "parameters":{
+         "siteName": {"value": "[variables('siteName')]"},
+         "functionAppName": {"value": "[parameters('functionAppName')]"},
+         "hostingPlanName": {"value": "[parameters('hostingPlanName')]"}
+       }
+      } 
+    },
+    {
+      "apiVersion": "2015-01-01", 
+      "name": "serviceBusTemplate", 
+      "type": "Microsoft.Resources/deployments", 
+      "properties": { 
+        "mode": "incremental", 
+        "templateLink": {
+          "uri": "[concat(parameters('GitBaseUri'), '/', parameters('Branch'), '/setup/serviceBusTemplate.json')]",
+          "contentVersion": "1.0.0.0"
+        }, 
+       "parameters":{
+         "serviceBusNamespaceName": {"value": "[variables('serviceBusNamespaceName')]"}
+       }
+      } 
+    },
+    {
+      "apiVersion": "2015-01-01", 
+      "name": "docDbTemplate", 
+      "type": "Microsoft.Resources/deployments", 
+      "properties": { 
+        "mode": "incremental", 
+        "templateLink": {
+          "uri": "[concat(parameters('GitBaseUri'), '/', parameters('Branch'), '/setup/docDbTemplate.json')]",
+          "contentVersion": "1.0.0.0"
+        }, 
+       "parameters":{
+         "databaseAccountName": {"value": "[variables('databaseAccountName')]"}
+       }
+      } 
+    },
+    {
+      "apiVersion": "2015-01-01", 
+      "name": "logicAppTemplate", 
+      "type": "Microsoft.Resources/deployments", 
+      "properties": { 
+        "mode": "incremental", 
+        "templateLink": {
+          "uri": "[concat(parameters('GitBaseUri'), '/', parameters('Branch'), '/setup/logicAppTemplate.json')]",
+          "contentVersion": "1.0.0.0"
+        }, 
+       "parameters":{
+         "logicAppName": { "value": "[variables('logicAppName')]" },
+         "serviceBusNamespaceName": { "value": "[variables('serviceBusNamespaceName')]" },
+         "databaseAccountName": { "value": "[variables('databaseAccountName')]" },
+         "sb_connectionString": {"value": "[reference('serviceBusTemplate').outputs.NamespaceDefaultConnectionString.value]"},
+         "docdb_databaseAccount": {"value": "[reference('docDbTemplate').outputs.docDbEndpoint.value]"},
+         "docdb_accessKey": {"value": "[reference('docDbTemplate').outputs.docDbPrimaryKey.value]"}
+       }
+      } 
+    }
+  ],
+  "outputs": {
+        "NamespaceDefaultConnectionString": {
+            "type": "string",  
+            "value": "[reference('serviceBusTemplate').outputs.NamespaceDefaultConnectionString.value]"
+        },
+        "DefaultSharedAccessPolicyPrimaryKey": {
+            "type": "string",
+            "value": "[reference('serviceBusTemplate').outputs.DefaultSharedAccessPolicyPrimaryKey.value]"
+        },
+        "docDbEndpoint": {
+          "type": "string",
+          "value": "[reference('docDbTemplate').outputs.docDbEndpoint.value]"
+        },
+        "docDbPrimaryKey":{
+          "type": "string",
+          "value": "[reference('docDbTemplate').outputs.docDbPrimaryKey.value]"
+        }
+    }
+}
