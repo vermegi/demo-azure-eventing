@@ -74,7 +74,7 @@
          "databaseAccountName": {"value": "[variables('databaseAccountName')]"}
        }
       } 
-    }
+    },
     {
       "apiVersion": "2015-01-01", 
       "name": "logicAppTemplate", 
