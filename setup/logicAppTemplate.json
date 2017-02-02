@@ -283,7 +283,7 @@
         }
       },
         "dependsOn": [
-            "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccountName'))]"
+            "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccountName'))]"
         ]      
     }
   ],
