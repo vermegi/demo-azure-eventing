@@ -62,7 +62,7 @@
    },
    "sourceCodeRepositoryURL2": {
     "type": "string",
-    "defaultValue": "https://github.com/vermegi/demo-azure-eventing.git",
+    "defaultValue": "https://github.com/vermegi/demo-azure-nodeapp.git",
     "metadata": {
     "description": "Source code repository URL"
     }
