@@ -49,7 +49,8 @@
     }
   },
   "variables": {
-          "location": "[resourceGroup().location]"
+          "location": "[resourceGroup().location]",
+          "functionAppName": "concat(parameters('siteName'), '_fun')"
   },
   "resources": [
     {
@@ -76,7 +77,24 @@
         "properties": {
           "serverFarmId": "[parameters('hostingPlanName')]"
         }
-      }
+      },
+      {
+        "apiVersion": "2015-08-01",
+        "type": "Microsoft.Web/sites",
+        "name": "[variables('functionAppName')]",
+        "location": "[resourceGroup().location]",
+        "kind": "functionapp",
+        "properties": {
+            "name": "[variables('functionAppName')]",
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
+            "hostingEnvironment": "",
+            "clientAffinityEnabled": false,
+            "alwaysOn": true
+        },
+        "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+        ]
+    }
   ],
   "outputs": {
   }
