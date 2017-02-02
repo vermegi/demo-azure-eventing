@@ -39,7 +39,10 @@
       }
     }
   },
-  "variables": {},
+  "variables": {
+      "sbconn": "sbconn",
+      "docdbconn": "docdbconn"
+  },
   "resources": [
     {
       "type": "Microsoft.Logic/workflows",
@@ -244,20 +247,20 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/connections', 'sbconn']",
-        "[resourceId('Microsoft.Web/connections', 'docdbconn']"
+        "[resourceId('Microsoft.Web/connections', variables('sbconn')]",
+        "[resourceId('Microsoft.Web/connections', variables('docdbconn')]"
       ]
     },
     {
       "type": "MICROSOFT.WEB/CONNECTIONS",
       "apiVersion": "2016-06-01",
-      "name": "sbconn",
+      "name": "variables('sbconn')",
       "location": "[resourceGroup().location]",
       "properties": {
         "api": {
           "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'servicebus')]"
         },
-        "displayName": "sbconn",
+        "displayName": "variables('sbconn')",
         "parameterValues": {
           "connectionString": "[parameters('sb_connectionString')]"
         },
@@ -269,13 +272,13 @@
     {
       "type": "MICROSOFT.WEB/CONNECTIONS",
       "apiVersion": "2016-06-01",
-      "name": "docdbconn",
+      "name": "variables('docdbconn')",
       "location": "[resourceGroup().location]",
       "properties": {
         "api": {
           "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'documentdb')]"
         },
-        "displayName": "docdbconn",
+        "displayName": "variables('docdbconn')",
         "parameterValues": {
           "databaseAccount": "[parameters('docdb_databaseAccount')]",
           "accessKey": "[parameters('docdb_accessKey')]"
