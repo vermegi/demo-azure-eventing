@@ -19,6 +19,13 @@
       "metadata": {
           "description": "Name of the hosting plan"
       }
+    },
+    "Branch": {
+      "type": "string",
+      "defaultValue": "master",
+      "metadata": {
+        "description": "the branch you wish to deploy"
+      }
     }
   },
   "variables": {
@@ -35,7 +42,7 @@
       "properties": { 
         "mode": "incremental", 
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/webappTemplate.json",
+          "uri": "[concat('https://raw.githubusercontent.com/vermegi/demo-azure-eventing/', parameters['Branch'], '/setup/webappTemplate.json')]",
           "contentVersion": "1.0.0.0"
         }, 
        "parameters":{
