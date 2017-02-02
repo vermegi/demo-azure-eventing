@@ -98,7 +98,7 @@
   ],
   "outputs": {
         "NamespaceDefaultConnectionString": {
-            "type": "string",
+            "type": "string",  
             "value": "[reference('serviceBusTemplate').outputs.NamespaceDefaultConnectionString.value]"
         },
         "DefaultSharedAccessPolicyPrimaryKey": {
