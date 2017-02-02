@@ -261,10 +261,7 @@
         "displayName": "sbconn",
         "parameterValues": {
           "connectionString": "[parameters('sb_connectionString')]"
-        },
-        "dependsOn": [
-          "[resourceId('Microsoft.ServiceBus/namespaces', variables('serviceBusNamespaceName'))]"
-        ]        
+        }       
       }
     },
     {
@@ -281,10 +278,7 @@
           "databaseAccount": "[parameters('docdb_databaseAccount')]",
           "accessKey": "[parameters('docdb_accessKey')]"
         }
-      },
-        "dependsOn": [
-            "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccountName'))]"
-        ]      
+      }     
     }
   ],
   "outputs": {}
