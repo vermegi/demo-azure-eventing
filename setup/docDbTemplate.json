@@ -23,5 +23,15 @@
         "databaseAccountOfferType": "[variables('offerType')]"
       }
     }
-  ]
-}
+  ],
+  "outputs": {
+    "docDbEndpoint": {
+      "type": "string",
+      "value": "[reference(concat('Microsoft.DocumentDb/databaseAccounts/', parameters('databaseAccountName'))).documentEndpoint]"
+    },
+    "docDbPrimaryKey":{
+      "type": "string",
+      "value": "[listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', parameters('databaseAccountName')), '2015-04-08').primaryMasterKey]"
+    }
+  }
+} 
