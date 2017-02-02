@@ -55,14 +55,14 @@
    },
    "sourceCodeRepositoryURL": {
     "type": "string",
-    "defaultValue": "",
+    "defaultValue": "https://github.com/vermegi/demo-azure-eventing.git",
     "metadata": {
     "description": "Source code repository URL"
     }
    },
    "sourceCodeBranch": {
       "type": "string",
-      "defaultValue": "master",
+      "defaultValue": "feature/setup",
       "metadata": {
         "description": "Sourcecode Repo branch"
       }
