@@ -87,14 +87,12 @@
         }, 
        "parameters":{
          "logicAppName": { "value": "[variables('logicAppName')]" },
+         "serviceBusNamespaceName": { "value": "[variables('serviceBusNamespaceName')]" },
+         "databaseAccountName": { "value": "[variables('databaseAccountName')]" },
          "sb_connectionString": {"value": "[reference('serviceBusTemplate').outputs.NamespaceDefaultConnectionString]"},
          "docdb_databaseAccount": {"value": "[reference('docDbTemplate').outputs.docDbEndpoint]"},
          "docdb_accessKey": {"value": "[reference('docDbTemplate').outputs.docDbPrimaryKey]"}
-       },
-        "dependsOn": [
-          "[resourceId('Microsoft.ServiceBus/namespaces', variables('serviceBusNamespaceName'))]",
-          "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('databaseAccountName'))]"
-        ]
+       }
       } 
     }
   ],
