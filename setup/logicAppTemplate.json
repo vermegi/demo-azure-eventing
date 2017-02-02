@@ -91,7 +91,8 @@
               },
               "Compose": {
                     "inputs": {
-                        "Message": "@{base64ToString(triggerBody()?['ContentData'])}",
+                        "data": "@{base64ToString(triggerBody()?['ContentData'])}",
+                        "id": "@{triggerBody()?['MessageId']}",
                         "Status": "New"
                     },
                     "runAfter": {
@@ -101,7 +102,8 @@
                 },
                 "Compose_2": {
                     "inputs": {
-                        "Message": "@{base64ToString(triggerBody()?['ContentData'])}",
+                        "data": "@{base64ToString(triggerBody()?['ContentData'])}",
+                        "id": "@{triggerBody()?['MessageId']}",
                         "Status": "Processed"
                     },
                     "runAfter": {
