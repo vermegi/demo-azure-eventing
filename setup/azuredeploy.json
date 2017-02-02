@@ -85,6 +85,14 @@
         "DefaultSharedAccessPolicyPrimaryKey": {
             "type": "string",
             "value": "[reference('serviceBusTemplate').outputs.DefaultSharedAccessPolicyPrimaryKey]"
+        },
+        "docDbEndpoint": {
+          "type": "string",
+          "value": "[reference('docDbTemplate').outputs.docDbEndpoint]"
+        },
+        "docDbPrimaryKey":{
+          "type": "string",
+          "value": "[reference('docDbTemplate').outputs.docDbPrimaryKey]"
         }
     }
 }
