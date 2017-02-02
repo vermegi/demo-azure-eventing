@@ -26,6 +26,13 @@
       "metadata": {
         "description": "the branch you wish to deploy"
       }
+    },
+    "GitBaseUri": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing",
+      "metadata": {
+        "description": "base url of the git repo"
+      }
     }
   },
   "variables": {
@@ -42,7 +49,7 @@
       "properties": { 
         "mode": "incremental", 
         "templateLink": {
-          "uri": "[concat('https://raw.githubusercontent.com/vermegi/demo-azure-eventing/', parameters('Branch'), '/setup/webappTemplate.json')]",
+          "uri": "[concat(parameters('GitBaseUri'), '/', parameters('Branch'), '/setup/webappTemplate.json')]",
           "contentVersion": "1.0.0.0"
         }, 
        "parameters":{
@@ -59,7 +66,7 @@
       "properties": { 
         "mode": "incremental", 
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/serviceBusTemplate.json",
+          "uri": "[concat(parameters('GitBaseUri'), '/', parameters('Branch'), '/setup/serviceBusTemplate.json')]",
           "contentVersion": "1.0.0.0"
         }, 
        "parameters":{
@@ -74,7 +81,7 @@
       "properties": { 
         "mode": "incremental", 
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/docDbTemplate.json",
+          "uri": "[concat(parameters('GitBaseUri'), '/', parameters('Branch'), '/setup/docDbTemplate.json')]",
           "contentVersion": "1.0.0.0"
         }, 
        "parameters":{
@@ -89,7 +96,7 @@
       "properties": { 
         "mode": "incremental", 
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/logicAppTemplate.json",
+          "uri": "[concat(parameters('GitBaseUri'), '/', parameters('Branch'), '/setup/logicAppTemplate.json')]",
           "contentVersion": "1.0.0.0"
         }, 
        "parameters":{

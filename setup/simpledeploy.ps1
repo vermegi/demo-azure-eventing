@@ -15,6 +15,6 @@ New-AzureRmResourceGroupDeployment -Name ((Get-ChildItem $TemplateFile).BaseName
                                     -ResourceGroupName $ResourceGroupName `
                                     -TemplateFile $TemplateFile `
                                     -TemplateParameterFile $TemplateParametersFile `
-                                    -Branch $Branch
+                                    -Branch $Branch `
                                     -Force -Verbose `
                                     -Mode Incremental 
