@@ -46,6 +46,9 @@
                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/', 'servicebus')]",
                 "connectionId": "[resourceId('Microsoft.Web/connections', 'sbconn']",
                 "connectionName": "sbconn"
+              },
+              "function":{
+                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/sites/azure-eventing-fun/functions/GenericWebhookFun')]"
               }
            }
         },
@@ -76,12 +79,27 @@
                     },
                     "type": "ApiConnection"
                 },
-                "Compose": {
+                "GenericWebhookFun": {
+                  "inputs": {
+                      "body": {
+                          "collname": "sbmessages",
+                          "dbname": "azure-eventing-db"
+                      },
+                      "function": {
+                          "id": "@parameters('$connections')['function']['id']"
+                      }
+                  },
+                  "runAfter": {},
+                  "type": "Function"
+              },
+              "Compose": {
                     "inputs": {
                         "Message": "@{base64ToString(triggerBody()?['ContentData'])}",
                         "Status": "New"
                     },
-                    "runAfter": {},
+                    "runAfter": {
+                      "GenericWebhookFun": ["Succeeded"]
+                    },
                     "type": "Compose"
                 },
                 "Compose_2": {
