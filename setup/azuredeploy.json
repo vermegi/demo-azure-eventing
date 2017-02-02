@@ -74,27 +74,27 @@
          "databaseAccountName": {"value": "[variables('databaseAccountName')]"}
        }
       } 
-    },
-    {
-      "apiVersion": "2015-01-01", 
-      "name": "logicAppTemplate", 
-      "type": "Microsoft.Resources/deployments", 
-      "properties": { 
-        "mode": "incremental", 
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/logicAppTemplate.json",
-          "contentVersion": "1.0.0.0"
-        }, 
-       "parameters":{
-         "logicAppName": { "value": "[variables('logicAppName')]" },
-         "serviceBusNamespaceName": { "value": "[variables('serviceBusNamespaceName')]" },
-         "databaseAccountName": { "value": "[variables('databaseAccountName')]" },
-         "sb_connectionString": {"value": "[reference('serviceBusTemplate').outputs.NamespaceDefaultConnectionString]"},
-         "docdb_databaseAccount": {"value": "[reference('docDbTemplate').outputs.docDbEndpoint]"},
-         "docdb_accessKey": {"value": "[reference('docDbTemplate').outputs.docDbPrimaryKey]"}
-       }
-      } 
     }
+    // {
+    //   "apiVersion": "2015-01-01", 
+    //   "name": "logicAppTemplate", 
+    //   "type": "Microsoft.Resources/deployments", 
+    //   "properties": { 
+    //     "mode": "incremental", 
+    //     "templateLink": {
+    //       "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/logicAppTemplate.json",
+    //       "contentVersion": "1.0.0.0"
+    //     }, 
+    //    "parameters":{
+    //      "logicAppName": { "value": "[variables('logicAppName')]" },
+    //      "serviceBusNamespaceName": { "value": "[variables('serviceBusNamespaceName')]" },
+    //      "databaseAccountName": { "value": "[variables('databaseAccountName')]" },
+    //      "sb_connectionString": {"value": "[reference('serviceBusTemplate').outputs.NamespaceDefaultConnectionString]"},
+    //      "docdb_databaseAccount": {"value": "[reference('docDbTemplate').outputs.docDbEndpoint]"},
+    //      "docdb_accessKey": {"value": "[reference('docDbTemplate').outputs.docDbPrimaryKey]"}
+    //    }
+    //   } 
+    // }
   ],
   "outputs": {
         "NamespaceDefaultConnectionString": {
