@@ -60,6 +60,13 @@
     "description": "Source code repository URL"
     }
    },
+   "sourceCodeRepositoryURL2": {
+    "type": "string",
+    "defaultValue": "https://github.com/vermegi/demo-azure-eventing.git",
+    "metadata": {
+    "description": "Source code repository URL"
+    }
+   },
    "sourceCodeBranch": {
       "type": "string",
       "defaultValue": "master",
@@ -108,7 +115,22 @@
         ],
         "properties": {
           "serverFarmId": "[parameters('hostingPlanName')]"
-        }
+        },
+        "resources": [
+          {
+            "apiVersion": "2015-08-01",
+            "name": "web",
+            "type": "sourcecontrols",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/sites/', parameters('siteName'))]"
+            ],
+            "properties": {
+              "RepoUrl": "[parameters('sourceCodeRepositoryURL2')]",
+              "branch": "[parameters('sourceCodeBranch')]",
+              "IsManualIntegration": "[parameters('sourceCodeManualIntegration')]"
+            }
+          }
+        ]
       },
       {
         "apiVersion": "2015-08-01",
