@@ -55,10 +55,6 @@
           "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/serviceBusTemplate.json",
           "contentVersion": "1.0.0.0"
         }, 
-        "parametersLink": { 
-          "uri":"https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/serviceBusTemplate.parameters.json",
-          "contentVersion":"1.0.0.0"
-       },
        "parameters":{
          "serviceBusNamespaceName": {"value": "[variables('serviceBusNamespaceName')]"}
        }
@@ -74,10 +70,6 @@
           "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/docDbTemplate.json",
           "contentVersion": "1.0.0.0"
         }, 
-        "parametersLink": { 
-          "uri":"https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/docDbTemplate.parameters.json",
-          "contentVersion":"1.0.0.0"
-       },
        "parameters":{
          "databaseAccountName": {"value": "[variables('databaseAccountName')]"}
        }
@@ -93,10 +85,6 @@
     //       "uri": "https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/logicAppTemplate.json",
     //       "contentVersion": "1.0.0.0"
     //     }, 
-    //     "parametersLink": { 
-    //       "uri":"https://raw.githubusercontent.com/vermegi/demo-azure-eventing/feature/setup/setup/logicAppTemplate.parameters.json",
-    //       "contentVersion":"1.0.0.0"
-    //    },
     //    "parameters":{
     //      "logicAppName": { "value": "[variables('logicAppName')]" },
     //      "sb_connectionString": {"value": "[reference('serviceBusTemplate').outputs.NamespaceDefaultConnectionString]"},
