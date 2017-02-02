@@ -62,7 +62,7 @@
    },
    "sourceCodeBranch": {
       "type": "string",
-      "defaultValue": "feature/setup",
+      "defaultValue": "master",
       "metadata": {
         "description": "Sourcecode Repo branch"
       }
