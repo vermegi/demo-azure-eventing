@@ -73,7 +73,13 @@
       "metadata": {
           "description": "Use 'true' if you are deploying from the base repo, 'false' if you are deploying from your own fork. If you're using 'false', make sure you have admin permissions to the repo. If you get an error, you should add GitHub integration to another web app manually, so that you get a GitHub access token associated with your Azure Subscription."
       }
-    }      
+    },
+    "authorizationkey":{
+      "type": "string"
+    },
+    "endpointurl":{
+      "type": "string"
+    }
   },
   "variables": {
     "location": "[resourceGroup().location]"
@@ -120,7 +126,9 @@
                 "alwaysOn": true,
                 "appSettings": [
                     { "name": "FUNCTIONS_EXTENSION_VERSION", "value": "~1" },
-                    { "name": "Project", "value": "src" }
+                    { "name": "Project", "value": "src" },
+                    { "name": "endpointurl", "value": "[parameters('endpointurl')]" },
+                    { "name": "authorizationkey", "value": "[parameters('authorizationkey')]" }
                 ]
             }
         },

@@ -55,7 +55,9 @@
        "parameters":{
          "siteName": {"value": "[variables('siteName')]"},
          "functionAppName": {"value": "[parameters('functionAppName')]"},
-         "hostingPlanName": {"value": "[parameters('hostingPlanName')]"}
+         "hostingPlanName": {"value": "[parameters('hostingPlanName')]"},
+         "authorizationkey": {"value": "[reference('docDbTemplate').outputs.docDbPrimaryKey.value]"},
+         "endpointurl": {"value": "[reference('docDbTemplate').outputs.docDbEndpoint.value]"}
        }
       } 
     },
