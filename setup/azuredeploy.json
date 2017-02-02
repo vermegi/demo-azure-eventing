@@ -42,7 +42,7 @@
       "properties": { 
         "mode": "incremental", 
         "templateLink": {
-          "uri": "[concat('https://raw.githubusercontent.com/vermegi/demo-azure-eventing/', parameters['Branch'], '/setup/webappTemplate.json')]",
+          "uri": "[concat('https://raw.githubusercontent.com/vermegi/demo-azure-eventing/', parameters('Branch'), '/setup/webappTemplate.json')]",
           "contentVersion": "1.0.0.0"
         }, 
        "parameters":{
