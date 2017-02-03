@@ -86,6 +86,9 @@
     },
     "endpointurl":{
       "type": "string"
+    },
+    "sb_connectionString":{
+      "type": "string"
     }
   },
   "variables": {
@@ -114,7 +117,17 @@
           "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
         ],
         "properties": {
-          "serverFarmId": "[parameters('hostingPlanName')]"
+          "serverFarmId": "[parameters('hostingPlanName')]",
+          "siteConfig": {
+              "alwaysOn": true,
+              "appSettings": [
+                  { "name": "APPSETTING_DocumentDBEndpoint", "value": "[parameters('endpointurl')]" },
+                  { "name": "APPSETTING_DocumentDBSecret", "value": "[parameters('authorizationkey')]" },
+                  { "name": "APPSETTING_DocumentDBCollectionUrl", "value": "dbs/azureeventingdb/colls/sbmessages" },
+                  { "name": "APPSETTING_SbConnectionstring", "value": "[parameters('sb_connectionString')]" },
+                  { "name": "port", "value": "80" }
+              ]
+          }
         },
         "resources": [
           {

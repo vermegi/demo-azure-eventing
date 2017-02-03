@@ -57,7 +57,8 @@
          "functionAppName": {"value": "[parameters('functionAppName')]"},
          "hostingPlanName": {"value": "[parameters('hostingPlanName')]"},
          "authorizationkey": {"value": "[reference('docDbTemplate').outputs.docDbPrimaryKey.value]"},
-         "endpointurl": {"value": "[reference('docDbTemplate').outputs.docDbEndpoint.value]"}
+         "endpointurl": {"value": "[reference('docDbTemplate').outputs.docDbEndpoint.value]"},
+         "sb_connectionString": {"value": "[reference('serviceBusTemplate').outputs.NamespaceDefaultConnectionString.value]"}
        }
       } 
     },
