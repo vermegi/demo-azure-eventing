@@ -121,10 +121,10 @@
           "siteConfig": {
               "alwaysOn": true,
               "appSettings": [
-                  { "name": "APPSETTING_DocumentDBEndpoint", "value": "[parameters('endpointurl')]" },
-                  { "name": "APPSETTING_DocumentDBSecret", "value": "[parameters('authorizationkey')]" },
-                  { "name": "APPSETTING_DocumentDBCollectionUrl", "value": "dbs/azureeventingdb/colls/sbmessages" },
-                  { "name": "APPSETTING_SbConnectionstring", "value": "[parameters('sb_connectionString')]" },
+                  { "name": "documentDBEndpoint", "value": "[parameters('endpointurl')]" },
+                  { "name": "documentDBSecret", "value": "[parameters('authorizationkey')]" },
+                  { "name": "documentDBCollectionUrl", "value": "dbs/azureeventingdb/colls/sbmessages" },
+                  { "name": "sbConnectionstring", "value": "[parameters('sb_connectionString')]" },
                   { "name": "port", "value": "80" }
               ]
           }
