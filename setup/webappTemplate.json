@@ -124,8 +124,7 @@
                   { "name": "documentDBEndpoint", "value": "[parameters('endpointurl')]" },
                   { "name": "documentDBSecret", "value": "[parameters('authorizationkey')]" },
                   { "name": "documentDBCollectionUrl", "value": "dbs/azureeventingdb/colls/sbmessages" },
-                  { "name": "sbConnectionstring", "value": "[parameters('sb_connectionString')]" },
-                  { "name": "port", "value": "80" }
+                  { "name": "sbConnectionstring", "value": "[parameters('sb_connectionString')]" }
               ]
           }
         },
